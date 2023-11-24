@@ -38,7 +38,7 @@ function App() {
 
   function getCategories() {
     axios
-      .get("http://127.0.0.1:8000/category/")
+      .get("https://django-final-proj-products.onrender.com/category/")
       .then((response) => {
         console.log("categories", response.data);
         setCategories(response.data);
@@ -49,10 +49,10 @@ function App() {
   }
 
   function getProducts() {
-    let url = "http://127.0.0.1:8000/product/?category=" + currentCategory;
+    let url = "https://django-final-proj-products.onrender.com/?category=" + currentCategory;
 
     if (currentSearch) {
-      url = "http://127.0.0.1:8000/product/?search=" + currentSearch;
+      url = "https://django-final-proj-products.onrender.com/product/?search=" + currentSearch;
     }
 
     axios
