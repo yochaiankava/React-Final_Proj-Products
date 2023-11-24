@@ -1,0 +1,19 @@
+/* src/Carousel.css */
+/* Import slick-carousel CSS */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+
+/* Custom styles for the navbar container */
+.navbar-container {
+  background-color: #333; /* Change to your desired background color */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px; /* Adjust padding as needed */
+}
+
+.custom-carousel .hc-item img {
+    width: 2px; /* Set your desired width */
+    height: 3x; /* Set your desired height */
+  }

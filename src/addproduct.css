@@ -1,0 +1,40 @@
+/* AddProduct.css */
+
+/* Style for the form container */
+.add-product-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* margin: 20px; */
+    /* padding: 20px; */
+    border: 1px solid #ccc;
+    /* border-radius: 8px; */
+    background-color: #333;
+  }
+  
+  /* Style for input fields */
+  .input-field {
+    color: white ;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for the file input */
+  .file-input {
+    color: white ;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for the button */
+  .add-product-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-product-button:hover {
+    background-color: #218838;
+  }
+  
