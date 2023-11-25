@@ -82,7 +82,7 @@ function Navbar({ categories, clickButton, searchProduct }) {
           
             {location.pathname !== "/login" && (
               <li className="nav-item">
-                <Link className="nav-item-text" to="login">
+                <Link className="nav-item-text" to="/login">
                   Login
                 </Link>
               </li>
