@@ -4,6 +4,10 @@ import axios from "axios";
 import "../addproduct.css"
 
 function AddProduct() {
+  
+  const HOST_URL ="http://localhost:8000"
+  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null); 
@@ -24,7 +28,7 @@ function AddProduct() {
       formData.append("stock", stock);
       formData.append("category", category);
 
-      const response = await axios.post("http://127.0.0.1:8000/product/", formData);
+      const response = await axios.post(`${HOST_URL}/product/`, formData);
       
     //   const response = await fetch("http://127.0.0.1:8000/product/", {
     //     method: "POST",

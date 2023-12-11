@@ -1,21 +1,47 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCart4 } from "react-icons/bs";
-
-
 import "../carousel.css";
 import Carousel from "./Carousel";
 import { BsEnvelopeHeart } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
-function Navbar({ categories, clickButton, searchProduct }) {
+function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, cartItemsCount }) {
+
+
   const [searchText, setSearchText] = useState(""); // this is the value of the search field
   const location = useLocation();
+  const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
+  
+  
 
-  // const images = [
-  //   'https://picsum.photos/1200/300',
-  //   'https://picsum.photos/1200/300',
-  //   'https://picsum.photos/1200/300',
-  // ];
+  useEffect(() => {
+
+    const storedUserId = localStorage.getItem("userId");
+    setUserId(storedUserId)
+
+    if (storedUserId) {   
+          
+  
+          fetchCartItemsCount();
+        
+        }
+        
+      }, [fetchCartItemsCount]);
+    
+ 
+  
+
+  const handleLogout = () => {
+    // Clear all data from local storage
+    localStorage.clear();
+    // Redirect to the login page or any other desired page after logout
+    navigate("/");
+    // Reload the page
+    window.location.reload();
+  };
+  
 
   return (
     <>
@@ -60,27 +86,27 @@ function Navbar({ categories, clickButton, searchProduct }) {
               </Link>
             </li>
           </div>
-          
+
           <div className="nav" style={{ marginLeft: "auto" }}>
-          {location.pathname !== "/gift_carts" && (
-            <li className="nav-item">
-              <Link className="nav-item-text" to="/gift_carts">
-              <BsEnvelopeHeart
-             style={{ fontSize: "2em", color: "violet", margin: "2px;" }}
-             />
-              </Link>
-            </li>
-          )}
-          
-          {location.pathname !== "/add_product" && (
-            <li className="nav-item">
-              <Link className="nav-item-text" to="/add_product">
-                Add Product
-              </Link>
-            </li>
-          )}
-          
-            {location.pathname !== "/login" && (
+            {location.pathname !== "/gift_carts" && (
+              <li className="nav-item">
+                <Link className="nav-item-text" to="/gift_carts">
+                  <BsEnvelopeHeart
+                    style={{ fontSize: "2em", color: "violet", margin: "2px;" }}
+                  />
+                </Link>
+              </li>
+            )}
+
+            {location.pathname !== "/add_product" && (
+              <li className="nav-item">
+                <Link className="nav-item-text" to="/add_product">
+                  Add Product
+                </Link>
+              </li>
+            )}
+
+            {userId === null && location.pathname !== "/login" && (
               <li className="nav-item">
                 <Link className="nav-item-text" to="/login">
                   Login
@@ -96,14 +122,25 @@ function Navbar({ categories, clickButton, searchProduct }) {
               </li>
             )}
 
+            {userId !== null && (
+              <li className="nav-item">
+                <button onClick={handleLogout} className="nav-item-text">
+                  Logout
+                </button>
+              </li>
+            )}
+
             <div className="nav-item cart-icon-container">
-              {location.pathname !== "/cart" && (
+              {/* {location.pathname !== "/cart" && ( */}
                 <li className="nav-item">
                   <Link to="/cart" className="cart-icon">
                     <BsCart4 />
+                    {cartItemsCount > 0 && (
+                      <span className="cart-item-count">{cartItemsCount}</span>
+                    )}
                   </Link>
                 </li>
-              )}
+              {/* )} */}
             </div>
 
             <li className="nav-item">

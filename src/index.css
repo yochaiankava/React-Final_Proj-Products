@@ -91,10 +91,21 @@ iframe {
 /* Styles for the cart icon */
 .cart-icon {
   color: white; 
-  font-size: 32px; 
-  
+  font-size: 32px;
+  position: relative; /* Add relative positioning to establish a containing block */
 }
 
 .cart-icon-container {
   margin-right: 20px; /* Adjust the margin value as needed for spacing */
+}
+
+.cart-item-count {
+  position: absolute;
+  top: -8px; /* Adjust the top value to move the count above the icon */
+  right: -8px; /* Adjust the right value to position it to the top right */
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.5rem;
+  font-size: 12px; /* Adjust the font size as needed */
 }

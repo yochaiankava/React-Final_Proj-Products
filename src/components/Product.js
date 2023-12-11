@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-function Product({ product }) {
+function Product({ product, fetchCartItemsCount }) {
+  const HOST_URL = "http://localhost:8000";
+  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+
   // State to track the quantity in the cart
   const [quantity, setQuantity] = useState(1);
+  const [cartId, setCartId] = useState(null);
+
+  useEffect(() => {
+    // Retrieve cartId from local storage
+    const storedCartId = localStorage.getItem("pendingCart.id");
+    setCartId(storedCartId);
+  }, []);
 
   // Function to handle quantity change
   const handleQuantityChange = (event) => {
@@ -14,13 +24,15 @@ function Product({ product }) {
   const addToCart = async () => {
     try {
       const formData = new FormData();
-      formData.append("cart", 1); // Assuming cart ID is 1
+      formData.append("cart", cartId);
       formData.append("product", product.id);
       formData.append("quantity", quantity);
 
-      const response = await axios.post("http://127.0.0.1:8000/cartitem/", formData);
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${decodedToken}`;
+      const response = await axios.post(`${HOST_URL}/cartitem/`, formData);
 
       if (response.status === 201) {
+        fetchCartItemsCount();
         console.log("Product added successfully");
       } else {
         console.error("Failed to add product");
@@ -36,18 +48,19 @@ function Product({ product }) {
         <img
           src={
             product.image
-              ? `http://localhost:8000/${product.image}`
+              ? HOST_URL + `/${product.image}`
               : `https://picsum.photos/268/180?random=${Math.random()}`
           }
           alt="Product"
-          style={{ maxWidth: "300px", maxHeight: "200px"}}
+          style={{ maxWidth: "300px", maxHeight: "200px" }}
         />
         <div className="card-body">
           <h5 className="card-title">{product.name}</h5>
           <p className="card-text">{product.price}</p>
           <div className="form-group">
-            <label htmlFor="quantity">Quantity:</label>
+            {/* <label htmlFor="quantity">Quantity:</label> */}
             <input
+              style={{ display: "none" }} // This will hide the input
               type="number"
               id="quantity"
               value={quantity}
