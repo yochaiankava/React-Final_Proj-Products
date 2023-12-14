@@ -24,8 +24,25 @@ function App() {
   const [currentCategoryName, setCurrentCategoryName] = useState("");
   const [currentSearch, setCurrentSearch] = useState("");
   const [userId, setUserId] = useState(null);
-
   const [cartItemsCount, setCartItemsCount] = useState(0);
+   
+  
+  const handleLoginSuccess = (userId) => {
+    console.log("Login successful! User ID:", userId);
+    // Additional logic for successful login
+    setUserId(userId); // Set userId in the component state
+  };
+
+  const fetchCartItemsCount = async () => {    
+    console.log('App user id:', userId)
+    try {      
+      const response = await fetch(`${HOST_URL}/cartitems/count/${userId}/`);
+      const data = await response.json();
+      setCartItemsCount(data.count);
+    } catch (error) {
+      console.error("Error fetching cart items count", error);
+    }
+  }; 
 
   useEffect(getProducts, [currentCategory, currentSearch]); // when loading the page for the first time - getProducts()
   useEffect(getCategories, []);
@@ -35,23 +52,7 @@ function App() {
       setUserId(storedUserId);
     }
   }, []);
-
-  const fetchCartItemsCount = async () => {
-    console.log('App user id:', userId)
-    try {      
-      const response = await fetch(`${HOST_URL}/cartitems/count/${userId}/`);
-      const data = await response.json();
-      setCartItemsCount(data.count);
-    } catch (error) {
-      console.error("Error fetching cart items count", error);
-    }
-  };
-
-  const handleLoginSuccess = (userId) => {
-    console.log("Login successful! User ID:", userId);
-    // Additional logic for successful login
-    setUserId(userId); // Set userId in the component state
-  };
+  
 
   function clickButton(id, name) {
     console.log("click", id, name);
@@ -97,7 +98,7 @@ function App() {
   }
 
   return (
-    <>
+    <>       
       <BrowserRouter>
         {
           <Navbar
@@ -135,12 +136,13 @@ function App() {
                         <Product
                           product={product}
                           fetchCartItemsCount={fetchCartItemsCount}
+                         
                         />
                       </div>
                     ))}
                   </div>
                   <br />
-                </div>
+                </div>                
               </>
             }
           />
@@ -154,7 +156,7 @@ function App() {
           <Route path="/gift_carts" element={<GiftCarts />} />
           <Route path="/carts_history" element={<CartsHistory userId={userId} />} />
           <Route path="/cart_items_history/:cartId" element={<CartItemsHistory />} />
-          <Route
+          <Route            
             path="/cart"
             element={
               <Cart

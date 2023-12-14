@@ -32,7 +32,7 @@ function CartItemHistory() {
 
         console.log("API Response:", response.data);
 
-        const closedCart = response.data
+        const closedCart = response.data;
 
         if (closedCart) {
           console.log("Pending Cart:", closedCart);
@@ -76,7 +76,10 @@ function CartItemHistory() {
         </Link>
 
         <h3>Cart Details:</h3>
-        <p>Open Date: {cart.date}</p>
+        <p>
+          Open Date:{" "}
+          {cart.date && new Date(cart.date).toLocaleDateString("en-GB")}
+        </p>
         <p>Customer: {cart.customer_name}</p>
         <p>Status: {cart.status}</p>
         <p>Total Price:</p>

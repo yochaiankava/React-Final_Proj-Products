@@ -21,7 +21,7 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
     const storedUserId = localStorage.getItem("userId");
     setUserId(storedUserId)
 
-    if (storedUserId) {   
+    if (storedUserId) {  
           
   
           fetchCartItemsCount();
@@ -114,7 +114,7 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
               </li>
             )}
 
-            {location.pathname !== "/register" && (
+            {userId === null &&location.pathname !== "/register" && (
               <li className="nav-item">
                 <Link className="nav-item-text" to="/register">
                   Register

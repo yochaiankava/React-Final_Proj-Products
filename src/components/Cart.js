@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Cart({ userId, fetchCartItemsCount }) {
   const HOST_URL = "http://localhost:8000";
@@ -10,6 +11,9 @@ function Cart({ userId, fetchCartItemsCount }) {
   const [isLoading, setIsLoading] = useState(true);
   const [modifiedQuantities, setModifiedQuantities] = useState({});
   const [cartItemsTotalPrices, setCartItemsTotalPrices] = useState({});
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showStockMessage, setShowStockMessage] = useState(false);
+  const navigate = useNavigate();
 
   const calculateTotalCartPrice = () => {
     let totalCartPrice = 0;
@@ -18,16 +22,21 @@ function Cart({ userId, fetchCartItemsCount }) {
     }
     return totalCartPrice;
   };
-  
 
-  // const [token, settoken] = useState(null);
+  const handleLogout = () => {
+    // Clear all data from local storage
+    localStorage.clear();
+    // Redirect to the login page or any other desired page after logout
+    navigate("/");
+    // Reload the page
+    window.location.reload();
+  };
 
   useEffect(() => {
     getCart(userId);
   }, [userId]);
 
   async function getCart(userId) {
-
     // const storedtoken = localStorage.getItem("token");
     // settoken(storedtoken)
     // console.log('Cart token:', storedtoken)
@@ -58,7 +67,6 @@ function Cart({ userId, fetchCartItemsCount }) {
             totalPrices[cartItem.id] = totalPrice;
           });
           setCartItemsTotalPrices(totalPrices);
-    
         } else {
           console.log("No pending cart found.");
         }
@@ -80,7 +88,6 @@ function Cart({ userId, fetchCartItemsCount }) {
       const response = await axios.delete(
         `${HOST_URL}/cartitem/${cartItemId}/`
       );
-
       if (response.status === 204) {
         console.log("Cart item deleted successfully");
         // Refresh the cart after deletion
@@ -97,26 +104,66 @@ function Cart({ userId, fetchCartItemsCount }) {
   // Function to handle modifying the quantity of a cart item
   const modifyCartItemQuantity = async (cartItemId, newQuantity) => {
     try {
-      if (newQuantity === 0) {
+      // If the new quantity is not zero, update the quantity
+      if (newQuantity >= 1) {
+        const cartItem = cart.cartitems.find((item) => item.id === cartItemId);
+
+        if (!cartItem) {
+          console.error("Cart item not found:", cartItemId);
+          return;
+        }
+
+        const productId = cartItem.product;
+
+        try {
+          // Fetch product details including stock
+          const productResponse = await axios.get(
+            `${HOST_URL}/product/${productId}/`
+          );
+          const product = productResponse.data;
+
+          if (!product || !product.id) {
+            console.error("Invalid product data:", product);
+            return;
+          }
+
+          // Check if there is enough stock
+          if (newQuantity > product.stock) {
+            console.log("Not enough stock for the product");
+            setShowStockMessage(true);
+            // console.log("showStockMessage is now:", showStockMessage);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setShowStockMessage(false);
+            // console.log("showStockMessage is now:", showStockMessage);
+            return;
+          }
+
+          // Log the product and stock
+          console.log("Cart item product:", product);
+          console.log("Product stock:", product.stock);
+
+          // Update the quantity
+          const response = await axios.put(
+            `${HOST_URL}/cartitem/${cartItemId}/`,
+            {
+              quantity: newQuantity,
+            }
+          );
+
+          if (response.status === 200) {
+            console.log("Cart item quantity modified successfully");
+            // Refresh the cart items count and get the updated cart
+            fetchCartItemsCount();
+            // getCart(userId);
+          } else {
+            console.error("Failed to modify cart item quantity");
+          }
+        } catch (error) {
+          console.error("Error fetching product data:", error);
+        }
+      } else {
         // If the new quantity is zero, delete the cart item
         await deleteCartItem(cartItemId);
-      } else {
-        // If the new quantity is not zero, update the quantity
-        const response = await axios.put(
-          `${HOST_URL}/cartitem/${cartItemId}/`,
-          {
-            quantity: newQuantity,
-          }
-        );
-
-        if (response.status === 200) {
-          console.log("Cart item quantity modified successfully");
-          // Refresh the cart items count and get the updated cart
-          fetchCartItemsCount();
-          getCart(userId);
-        } else {
-          console.error("Failed to modify cart item quantity");
-        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -130,11 +177,9 @@ function Cart({ userId, fetchCartItemsCount }) {
     };
     setModifiedQuantities(newQuantities);
   };
-
   if (isLoading) {
     return <p>Loading cart items...</p>;
   }
-
   if (!cart) {
     return <p>Cart is empty or data is invalid.</p>;
   }
@@ -146,7 +191,6 @@ function Cart({ userId, fetchCartItemsCount }) {
       // Iterate over each cart item
       for (const cartItem of cart.cartitems) {
         console.log("CartItem:", cartItem);
-
         // Check if product_id is defined
         if (cartItem.product) {
           const newStock = Math.max(
@@ -155,11 +199,12 @@ function Cart({ userId, fetchCartItemsCount }) {
           );
           const productId = cartItem.product;
 
-          console.log("newStock:", newStock);
+          console.log("cart_id:", cart.id);
           console.log("productId:", productId);
+          console.log("newStock:", newStock);
 
           // Update the product stock
-          await axios.put(`${HOST_URL}/product/${productId}/`, {
+          await axios.put(`${HOST_URL}/product/${productId}/update_stock/`, {
             stock: newStock,
           });
         } else {
@@ -168,21 +213,38 @@ function Cart({ userId, fetchCartItemsCount }) {
       }
 
       // Change the cart status to 'Completed'
-      await axios.put(`${HOST_URL}/cart/${cart.id}/`, {
+      await axios.put(`${HOST_URL}/cart/${cart.id}/update_status/`, {
         status: "Closed",
       });
 
       console.log("Checkout successful");
+      // Show success message
+      setShowSuccessMessage(true);
+      // Delay for 3 seconds (adjust the duration as needed)
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      handleLogout();
       // Refresh the cart items count and get the updated cart
-      fetchCartItemsCount();
-      getCart(userId);
+      // fetchCartItemsCount();
+      // window.location.reload();
+      // getCart(userId);
     } catch (error) {
       console.error("Error during checkout:", error);
     }
   };
 
   return (
-    <div>
+    <div >
+      {showSuccessMessage && (
+        <div className="alert alert-success" role="alert">
+          Your order has been successfully received. Thank you and goodbye!
+        </div>
+      )}
+      {showStockMessage && (
+        <div className="alert alert-danger" role="alert">
+          Not enough stock for the product
+        </div>
+      )}    
       <div>
         <Link className="btn btn-success" to="/carts_history">
           Carts History
@@ -190,8 +252,10 @@ function Cart({ userId, fetchCartItemsCount }) {
 
         <h3>Cart Details:</h3>
         {/* <p>Open Date: {cart.date}</p> */}
-        <p>Open Date:{" "}
-                {cart.date && new Date(cart.date).toLocaleDateString("en-GB")}</p>
+        <p>
+          Open Date:{" "}
+          {cart.date && new Date(cart.date).toLocaleDateString("en-GB")}
+        </p>
         <p>Customer: {cart.customer_name}</p>
         <p>Status: {cart.status}</p>
         <p>Total Cart Price: {calculateTotalCartPrice()}</p>
@@ -201,7 +265,7 @@ function Cart({ userId, fetchCartItemsCount }) {
         <thead>
           <tr>
             <th>Product Name</th>
-            <th>Quantity</th>            
+            <th>Quantity</th>
             <th>Total Price</th>
             <th>Actions</th>
           </tr>
@@ -215,10 +279,12 @@ function Cart({ userId, fetchCartItemsCount }) {
                   <input
                     type="number"
                     value={modifiedQuantities[cartItem.id] || cartItem.quantity}
-                    onChange={(event) => handleQuantityChange(cartItem.id, event)}
+                    onChange={(event) =>
+                      handleQuantityChange(cartItem.id, event)
+                    }
                     min="0"
                   />
-                </td>                
+                </td>
                 <td>{cartItemsTotalPrices[cartItem.id]}</td>
                 <td>
                   <button
@@ -239,12 +305,13 @@ function Cart({ userId, fetchCartItemsCount }) {
                     Delete
                   </button>
                 </td>
+                
               </tr>
             ))}
         </tbody>
       </table>
       {/* Display the total cart price */}
-      
+
       <button className="btn btn-success" onClick={checkout}>
         Checkout
       </button>

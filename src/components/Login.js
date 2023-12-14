@@ -3,17 +3,18 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
+
 const Login = ({ onLoginSuccess }) => {
   const HOST_URL = "http://localhost:8000";
-   // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-
+  
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -71,9 +72,7 @@ const Login = ({ onLoginSuccess }) => {
 
         const cartResponse = await axios.get(`${HOST_URL}/cart/`, {
           params: { user_id: userId },
-        });
-
-        console.log("user_id", userId);
+        });        
 
         if (!hasPendingCarts(cartResponse.data)) {
           // If the user doesn't have a cart with status 'Pending', create a new one
@@ -84,20 +83,20 @@ const Login = ({ onLoginSuccess }) => {
         const pendingCart = cartResponse.data.find(
           (cart) => cart.status === "Pending"
         );
+        localStorage.setItem("pendingCart", pendingCart);
+        console.log("pendingCart", pendingCart);
         if (pendingCart) {
           // Save the pendingCart object directly to local storage
           
           const pendingCartId = pendingCart.id;
-
           localStorage.setItem("pendingCart.id", pendingCartId);
-
           console.log("pendingCartId", pendingCartId);
         }
 
         // Handle successful login, e.g., redirect to a new page
         console.log("Login successful", response.data);
         onLoginSuccess(userId);
-        alert("Login successful");
+        alert("Login successful");       
         navigate("/");
         // Reload the page
         window.location.reload();
