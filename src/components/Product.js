@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function Product({ product, fetchCartItemsCount }) {
-  const HOST_URL = "http://localhost:8000";
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "http://localhost:8000";
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   // State to track the quantity in the cart
   const [quantity, setQuantity] = useState(1);

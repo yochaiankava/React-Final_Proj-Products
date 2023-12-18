@@ -5,8 +5,8 @@ import "../addproduct.css"
 
 function AddProduct() {
   
-  const HOST_URL ="http://localhost:8000"
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL ="http://localhost:8000"
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");

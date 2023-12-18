@@ -15,8 +15,8 @@ import CartItemsHistory from "./components/CartItemsHistory";
 
 
 function App() {
-  const HOST_URL = "http://127.0.0.1:8000";
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "http://127.0.0.1:8000";
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const [products, setProducts] = useState([]);
   const [cateogries, setCategories] = useState([]);

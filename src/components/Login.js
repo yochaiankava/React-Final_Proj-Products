@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 
 const Login = ({ onLoginSuccess }) => {
-  const HOST_URL = "http://localhost:8000";
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "http://localhost:8000";
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

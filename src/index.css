@@ -1,16 +1,19 @@
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.footer-container {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  
+  /* Flexbox styles */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 50vh; /* Set minimum height to 100% of the viewport height */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Optionally, you can add more styles for better appearance */
+.footer-container p {
+  margin: 0; /* Remove default margin for paragraphs */
 }
 
 .logo {
@@ -23,15 +26,24 @@ code {
 
 
 
-.app {
-  /* list-style: none;
-  display: flex;  
-  align-items: center;
-  padding: 10;
-  margin: 0; */
-  background-color: #333; /* Background color for the nav element */
-  /* padding: 10px; Add padding for better appearance */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Set minimum height of body to 100% viewport height */
+  display: flex;
+  flex-direction: column;
 }
+
+.app {
+  flex: 1; 
+  /* display: flex; */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  padding: 10px;
+}
+
 
 .nav {
   list-style: none;
@@ -108,4 +120,21 @@ iframe {
   border-radius: 50%;
   padding: 0.2rem 0.5rem;
   font-size: 12px; /* Adjust the font size as needed */
+}
+
+.cart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  margin: auto;
+  max-width: 3000px; /* Adjust the max-width as needed */
+}
+
+.alert {
+  margin: 10px 0;
 }

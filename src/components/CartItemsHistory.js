@@ -3,8 +3,8 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 function CartItemHistory() {
-  const HOST_URL = "http://localhost:8000";
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "http://localhost:8000";
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const { cartId } = useParams(); // Access cartId from URL parameters
   const [cart, setCart] = useState(null);
@@ -69,33 +69,48 @@ function CartItemHistory() {
   }
 
   return (
-    <div>
+    <div className="cart-container">
       <div>
         <Link className="btn btn-success" to="/carts_history">
           Carts History
         </Link>
 
-        <h3>Cart Details:</h3>
+        <h1
+        className="text-center mb-3"
+        style={{ color: "white", fontStyle: "italic" }}
+        >Cart Details:</h1>
         <p>
           Open Date:{" "}
           {cart.date && new Date(cart.date).toLocaleDateString("en-GB")}
         </p>
         <p>Customer: {cart.customer_name}</p>
         <p>Status: {cart.status}</p>
-        <p>Total Price:</p>
+        {/* Display the total cart price */}
+        <p>Total Cart Price: {calculateTotalCartPrice()}</p>
       </div>
-      <h4>Cart Items:</h4>
-      <ul>
-        {cart.cartitems &&
-          cart.cartitems.map((cartItem) => (
-            <li key={cartItem.id}>
-              Product Name: {cartItem.product_name} - Quantity:{" "}
-              <p>Total Price: {cartItemsTotalPrices[cartItem.id]}</p>
-            </li>
-          ))}
-      </ul>
-      {/* Display the total cart price */}
-      <p>Total Cart Price: {calculateTotalCartPrice()}</p>
+      <h1
+      className="text-center mb-3"
+      style={{ color: "white", fontStyle: "italic" }}
+      >Cart Items:</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cart.cartitems &&
+            cart.cartitems.map((cartItem) => (
+              <tr key={cartItem.id}>
+                <td>{cartItem.product_name}</td>
+                <td>{cartItem.quantity}</td>
+                <td>{cartItemsTotalPrices[cartItem.id]}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </div>
   );
 }

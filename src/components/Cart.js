@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Cart({ userId, fetchCartItemsCount }) {
-  const HOST_URL = "http://localhost:8000";
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "http://localhost:8000";
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const [cart, setCart] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -154,7 +154,7 @@ function Cart({ userId, fetchCartItemsCount }) {
             console.log("Cart item quantity modified successfully");
             // Refresh the cart items count and get the updated cart
             fetchCartItemsCount();
-            // getCart(userId);
+            getCart(userId);
           } else {
             console.error("Failed to modify cart item quantity");
           }
@@ -234,7 +234,7 @@ function Cart({ userId, fetchCartItemsCount }) {
   };
 
   return (
-    <div >
+    <div className="cart-container">
       {showSuccessMessage && (
         <div className="alert alert-success" role="alert">
           Your order has been successfully received. Thank you and goodbye!
@@ -250,7 +250,11 @@ function Cart({ userId, fetchCartItemsCount }) {
           Carts History
         </Link>
 
-        <h3>Cart Details:</h3>
+        <h1
+        className="text-center mb-3"
+        style={{ color: "white", fontStyle: "italic" }}
+        >        
+          Cart Details:</h1>
         {/* <p>Open Date: {cart.date}</p> */}
         <p>
           Open Date:{" "}
@@ -260,7 +264,10 @@ function Cart({ userId, fetchCartItemsCount }) {
         <p>Status: {cart.status}</p>
         <p>Total Cart Price: {calculateTotalCartPrice()}</p>
       </div>
-      <h4>Cart Items:</h4>
+      <h1
+       className="text-center mb-3"
+       style={{ color: "white", fontStyle: "italic" }}
+      >Cart Items:</h1>
       <table className="table">
         <thead>
           <tr>

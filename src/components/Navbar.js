@@ -148,7 +148,7 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
                 className="card-img-top product-image"
                 src="https://www.ankava.co.il/wp-content/uploads/lodo-text.png"
                 alt="Card cap"
-                style={{ maxWidth: "150px" }}
+                style={{ maxWidth: "200px" }}
               />
             </li>
           </div>

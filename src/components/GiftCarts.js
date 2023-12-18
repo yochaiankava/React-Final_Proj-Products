@@ -7,8 +7,8 @@ function GiftCards() {
 
   function getGiftCards() {
 
-    const HOST_URL ="http://localhost:8000"
-    // const HOST_URL = "https://django-final-proj-products.onrender.com";
+    // const HOST_URL ="http://localhost:8000"
+    const HOST_URL = "https://django-final-proj-products.onrender.com";
 
     console.log("!!! getGiftCards !!!");
     axios.get(HOST_URL + "/gift_cards/")

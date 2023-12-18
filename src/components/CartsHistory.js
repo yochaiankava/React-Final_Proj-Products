@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
 function CartHistory({ userId }) {
-  const HOST_URL = "http://localhost:8000";
-  // const HOST_URL = "https://django-final-proj-products.onrender.com";
+  // const HOST_URL = "http://localhost:8000";
+  const HOST_URL = "https://django-final-proj-products.onrender.com";
 
   const [closedCarts, setClosedCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,12 +13,19 @@ function CartHistory({ userId }) {
     const fetchClosedCarts = async () => {
       try {
         const response = await axios.get(`${HOST_URL}/cart/`, {
-          params: { user_id: userId, status: "Closed" },
+          params: { user_id: userId },
         });
 
-        console.log("Closed Carts:", response.data);
+        console.log("User Carts:", response.data);
 
-        setClosedCarts(response.data);
+        // Filter closed carts
+        const closedCartsFiltered = response.data.filter(
+          (cart) => cart.status === "Closed"
+        );
+
+        console.log("Closed Carts:", closedCartsFiltered);
+
+        setClosedCarts(closedCartsFiltered);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching closed carts:", error);
@@ -39,36 +45,40 @@ function CartHistory({ userId }) {
   }
 
   return (
-    <div>
-      <div>
-      <h2>Carts History :</h2>
-      {/* <h2>Cart History - Closed Carts for User ID: {userId}</h2> */}
+    <div className="cart-container">
+      <h1 className="text-center mb-3" style={{ color: "white", fontStyle: "italic" }}>
+        Carts History :
+      </h1>
       {closedCarts.length === 0 ? (
         <p>No closed carts found for the user.</p>
       ) : (
-        <ul>
-          {closedCarts.map((cart) => (
-            <li key={cart.id}>
-              {/* <p>Cart ID: {cart.id}</p> */}
-              {/* <p>Open Date: {cart.date}</p> */}
-              <p>
-                Open Date:{" "}
-                {cart.date && new Date(cart.date).toLocaleDateString("en-GB")}
-              </p>
-              {/* <p>Status: {cart.status}</p> */}
-              {/* Additional information about the closed cart */}
-              {/* <p>Total Cart Price: {}</p> */}
-              <p>
-              <Link className="btn btn-success" 
-              to={`/cart_items_history/${cart.id}`}  >
-                Cart Items History
-              </Link>
-              </p>
-            </li>
-          ))}
-        </ul>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Open Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {closedCarts.map((cart) => (
+              <tr key={cart.id}>
+                <td>
+                  {cart.date &&
+                    new Date(cart.date).toLocaleDateString("en-GB")}
+                </td>
+                <td>
+                  <Link
+                    className="btn btn-success"
+                    to={`/cart_items_history/${cart.id}`}
+                  >
+                    Cart Items History
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
-      </div>
     </div>
   );
 }
