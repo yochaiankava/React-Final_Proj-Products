@@ -114,8 +114,11 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="cart-container">
+      <h1
+      className="text-center mb-3"
+      style={{ color: "white", fontStyle: "italic" }}
+      >Login:</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Username:
