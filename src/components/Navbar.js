@@ -123,9 +123,9 @@ function Navbar({
               </li>
             )}
 
-            {userId !== null && (
+            
               <div className="nav-item cart-icon-container">
-                {/* {location.pathname !== "/cart" && ( */}
+                {userId !== null && location.pathname !== "/cart" && (
                 <li className="nav-item">
                   <Link to="/cart" className="cart-icon">
                     <BsCart4 />
@@ -134,9 +134,9 @@ function Navbar({
                     )}
                   </Link>
                 </li>
-                {/* )} */}
+                 )}
               </div>
-            )}
+        
 
             <li className="nav-item">
               <img
