@@ -6,32 +6,26 @@ import Carousel from "./Carousel";
 import { BsEnvelopeHeart } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, cartItemsCount }) {
-
-
+function Navbar({
+  categories,
+  clickButton,
+  searchProduct,
+  fetchCartItemsCount,
+  cartItemsCount,
+}) {
   const [searchText, setSearchText] = useState(""); // this is the value of the search field
   const location = useLocation();
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
-  
-  
 
   useEffect(() => {
-
     const storedUserId = localStorage.getItem("userId");
-    setUserId(storedUserId)
+    setUserId(storedUserId);
 
-    if (storedUserId) {  
-          
-  
-          fetchCartItemsCount();
-        
-        }
-        
-      }, [fetchCartItemsCount]);
-    
- 
-  
+    if (storedUserId) {
+      fetchCartItemsCount();
+    }
+  }, [fetchCartItemsCount]);
 
   const handleLogout = () => {
     // Clear all data from local storage
@@ -41,7 +35,6 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
     // Reload the page
     window.location.reload();
   };
-  
 
   return (
     <>
@@ -114,7 +107,7 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
               </li>
             )}
 
-            {userId === null &&location.pathname !== "/register" && (
+            {userId === null && location.pathname !== "/register" && (
               <li className="nav-item">
                 <Link className="nav-item-text" to="/register">
                   Register
@@ -130,8 +123,9 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
               </li>
             )}
 
-            <div className="nav-item cart-icon-container">
-              {/* {location.pathname !== "/cart" && ( */}
+            {userId !== null && (
+              <div className="nav-item cart-icon-container">
+                {/* {location.pathname !== "/cart" && ( */}
                 <li className="nav-item">
                   <Link to="/cart" className="cart-icon">
                     <BsCart4 />
@@ -140,8 +134,9 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
                     )}
                   </Link>
                 </li>
-              {/* )} */}
-            </div>
+                {/* )} */}
+              </div>
+            )}
 
             <li className="nav-item">
               <img
