@@ -98,7 +98,7 @@ function Navbar({ categories, clickButton, searchProduct, fetchCartItemsCount, c
               </li>
             )}
 
-            {location.pathname !== "/add_product" && (
+            {userId === 1 && location.pathname !== "/add_product" && (
               <li className="nav-item">
                 <Link className="nav-item-text" to="/add_product">
                   Add Product
