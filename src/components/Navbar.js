@@ -81,7 +81,7 @@ function Navbar({
           </div>
 
           <div className="nav" style={{ marginLeft: "auto" }}>
-            {location.pathname !== "/gift_carts" && (
+            {userId !== null && location.pathname !== "/gift_carts" && (
               <li className="nav-item">
                 <Link className="nav-item-text" to="/gift_carts">
                   <BsEnvelopeHeart
@@ -91,7 +91,7 @@ function Navbar({
               </li>
             )}
 
-            {userId === 1 && location.pathname !== "/add_product" && (
+            {userId === "1" && location.pathname !== "/add_product" && (
               <li className="nav-item">
                 <Link className="nav-item-text" to="/add_product">
                   Add Product
@@ -123,9 +123,9 @@ function Navbar({
               </li>
             )}
 
-            
+       
               <div className="nav-item cart-icon-container">
-                {userId !== null && location.pathname !== "/cart" && (
+                {/* {location.pathname !== "/cart" && ( */}
                 <li className="nav-item">
                   <Link to="/cart" className="cart-icon">
                     <BsCart4 />
@@ -134,9 +134,9 @@ function Navbar({
                     )}
                   </Link>
                 </li>
-                 )}
+                {/* )} */}
               </div>
-        
+       
 
             <li className="nav-item">
               <img

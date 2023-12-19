@@ -120,7 +120,8 @@ const Login = ({ onLoginSuccess }) => {
       style={{ color: "white", fontStyle: "italic" }}
       >Login:</h1>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label
+        className="text-center mb-3">
           Username:
           <input
             type="text"
@@ -129,8 +130,9 @@ const Login = ({ onLoginSuccess }) => {
             onChange={handleChange}
           />
         </label>
-        <br />
-        <label>
+        <br></br>
+        <label
+        className="text-center mb-3">
           Password:
           <input
             type="password"
@@ -140,7 +142,7 @@ const Login = ({ onLoginSuccess }) => {
           />
         </label>
         <br />
-        <button type="submit">Login</button>
+        <button className="btn btn-success" type="submit">Login</button>
       </form>
     </div>
   );
